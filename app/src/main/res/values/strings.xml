@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">ToDoApp</string>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!--                    MainActivityViewModel                    -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="observable_response_complete" translatable="false">Observable Complete</string>
+    <string name="observable_response_error" translatable="false">Observable Error</string>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!--                   add_todo_layout                           -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="add_todo_button">Add</string>
+    <string name="description_et_hint">Description</string>
+
+    <!--                   Spinner Options                           -->
+    <string name="high_priority">High Priority</string>
+    <string name="medium_priority">Medium Priority</string>
+    <string name="low_priority">Low Priority</string>
+
+
+</resources>
