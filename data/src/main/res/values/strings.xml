@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">data</string>
+    <string name="recreate_activity_key" translatable="false">recreate_activity</string>
 </resources>

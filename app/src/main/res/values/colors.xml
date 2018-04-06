@@ -3,4 +3,23 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="highPriorityView">#FFCDD2</color>
+    <color name="mediumPriorityView">#FFF9C4</color>
+    <color name="lowPriorityView"></color>
+    <color name="checkedViewBackground">#d9d9d9</color>
+    <color name="textViewSeperators">#E0E0E0</color>
+
+    <!--             Dark Theme                 -->
+    <color name="darkColorPrimary">#1e2756</color>
+    <color name="darkColorPrimaryDark">#141831</color>
+    <color name="darkColorAccent">#2aac4b</color>
+    <color name="darkHighPriorityView">#6f0000</color>
+    <color name="darkMediumPriorityView">#827717</color>
+    <color name="darkLowPriorityView">#424242</color>
+    <color name="darkCheckedViewBackground">#3b3b3b</color>
+    <color name="darkCheckedTextColor">#aeaeae</color>
+    <color name="darkTextViewSeperators">#8c8c8c</color>
+
+    <color name="darkColorViewBackground"></color>
+    <color name="darkTextColor">#E0E0E0</color>
 </resources>

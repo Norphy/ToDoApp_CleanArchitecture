@@ -35,7 +35,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     private TodoModelMapper todoModelMapper = new TodoModelMapper();
     private TodoLocalDataStore todoLocalDataStore = new TodoLocalDataStore(mContext);
     private TodoDataRepository todoDataRepository = new TodoDataRepository(todoModelMapper,todoLocalDataStore);
-    private TodoPresentationModel mDeletedTodo;
     private static final String TAG = MainActivityViewModel.class.getSimpleName();
 
     private TodoPresentationModelMapper todoPresentationModelMapper = new TodoPresentationModelMapper();
@@ -47,6 +46,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     private void setTodoAsLive(List<Todo> newTodos) {
+
         todos.setValue(todoPresentationModelMapper.transformListFromDomainToPresent(newTodos));
     }
 
@@ -59,6 +59,9 @@ public class MainActivityViewModel extends AndroidViewModel {
         return todos;
     }
 
+
+
+
     @Override
     public void onCleared() {
         super.onCleared();
@@ -66,9 +69,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     }
 
     public void delete(TodoPresentationModel todoPresentationModel) {
-        mDeletedTodo = todoPresentationModel;
         todoDataRepository.deleteTodo(todoPresentationModelMapper.transformFromPresentToDomain(todoPresentationModel));
-
     }
 
     public void undoDelete(TodoPresentationModel todoPresentationModel) {

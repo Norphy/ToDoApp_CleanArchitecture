@@ -18,5 +18,17 @@
     <string name="medium_priority">Medium Priority</string>
     <string name="low_priority">Low Priority</string>
 
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!--                 settings_preferences_fragment               -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="theme_pref_checkbox_key" translatable="false">dark_theme</string>
+    <string name="theme_pref_title">Night Mode</string>
+
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!--                     main_activity_menu                      -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <string name="settings_action_title">Settings</string>
+
 
 </resources>

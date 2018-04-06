@@ -25,7 +25,6 @@
             android:textSize="16sp"
             android:paddingStart="72dp"
             android:paddingEnd="46dp"
-            android:textColor="@android:color/darker_gray"
             android:layout_centerVertical="true"/>
 
         <CheckBox
@@ -40,10 +39,10 @@
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/text_view_seperators"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:background="#E0E0E0"/>
+        android:layout_marginRight="16dp"/>
 
 </LinearLayout>

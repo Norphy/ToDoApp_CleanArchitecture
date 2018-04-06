@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.orphy.data.Constants;
+import com.example.orphy.data.SharedPreferencesManager;
 import com.example.orphy.todoapp.adapter.TodoAdapter;
 import com.example.orphy.todoapp.viewmodel.AddTodoViewModel;
 
@@ -27,11 +29,17 @@ public class AddTodoActivity extends AppCompatActivity {
     private Spinner mPrioritySpinner;
     private CheckBox mCheckBox;
     private String mPriorityString;
+    private SharedPreferencesManager sharedPreferencesManager;
 
     private AddTodoViewModel mAddTodoViewModel;
 
     @Override
     public void onCreate(Bundle savedInstances) {
+        sharedPreferencesManager = SharedPreferencesManager.getInstance();
+        if(sharedPreferencesManager.read(Constants.SharedPrefs.PREF_THEME_KEY,
+                getResources().getBoolean(R.bool.pref_theme_def_value))) {
+            setTheme(R.style.AppTheme_Dark);
+        }
         super.onCreate(savedInstances);
         setContentView(R.layout.add_todo_layout);
 
@@ -62,6 +70,7 @@ public class AddTodoActivity extends AppCompatActivity {
         mAddTodoViewModel.getNewTodo(descriptionString, mPriorityString, isChecked);
         mAddTodoViewModel.addTodoDatabase();
         Toast.makeText(this, "Added a todo successfully", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     private void setupSpinner() {

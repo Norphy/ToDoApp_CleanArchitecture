@@ -9,10 +9,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.example.orphy.data.Constants;
+import com.example.orphy.data.SharedPreferencesManager;
 import com.example.orphy.data.TodoModelMapper;
 import com.example.orphy.data.repository.TodoDataRepository;
 import com.example.orphy.data.repository.datasource.TodoLocalDataStore;
@@ -39,9 +43,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
     private static final String TAG = TodoAdapter.class.getSimpleName();
 
     private Context mContext;
-    final private TodoModelMapper todoModelMapper = new TodoModelMapper();
+
     final private TodoDataRepository todoDataRepository;
     final private TodoPresentationModelMapper todoPresentationModelMapper = new TodoPresentationModelMapper();
+    private SharedPreferencesManager sharedPreferencesManager;
 
 
     public TodoAdapter(List<TodoPresentationModel> newTodoList, Context context) {
@@ -49,7 +54,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
         this.mTodoList = newTodoList;
         //mTodoSortedList = sortTodos(newTodoList);
         final TodoLocalDataStore todoLocalDataStore = new TodoLocalDataStore(mContext);
+        final TodoModelMapper todoModelMapper = new TodoModelMapper();
         todoDataRepository = new TodoDataRepository(todoModelMapper, todoLocalDataStore);
+        sharedPreferencesManager = SharedPreferencesManager.getInstance();
+
     }
 
     @Override
@@ -69,6 +77,14 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
         boolean isChecked = currentTodo.getIsChecked();
         boolean isPinned = currentTodo.getIsPinned();
         int priority = currentTodo.getPriority();
+
+        if(sharedPreferencesManager.read(Constants.SharedPrefs.PREF_THEME_KEY,
+                holder.itemView.getResources().getBoolean(R.bool.pref_theme_def_value))) {
+            holder.textViewSeperators.setBackgroundColor(holder.itemView.getResources().getColor(R.color.darkTextViewSeperators));
+        } else {
+            holder.textViewSeperators.setBackgroundColor(holder.itemView.getResources().getColor(R.color.textViewSeperators));
+        }
+
 
         mOnBind = true;
         holder.todoDescriptionTextView.setText(description);
@@ -95,6 +111,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
 
         TextView todoDescriptionTextView;
         CheckBox todoCheckBox;
+        TextView textViewSeperators;
 
 
         public TodoViewHolder(View itemView) {
@@ -102,8 +119,30 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
 
             todoDescriptionTextView = itemView.findViewById(R.id.description_text_view);
             todoCheckBox = itemView.findViewById(R.id.todo_check_box);
+            textViewSeperators = itemView.findViewById(R.id.text_view_seperators);
 
             todoCheckBox.setOnCheckedChangeListener(this);
+            itemView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean hasFocus) {
+                    if(hasFocus) {
+                        Animation scaleUp = new ScaleAnimation(1f, 1.2f, 1f, 1.2f,
+                                Animation.RELATIVE_TO_SELF, 0.5f,
+                                Animation.RELATIVE_TO_SELF, 0.5f);
+                        scaleUp.setFillAfter(true);
+                        scaleUp.setDuration(500);
+                        view.startAnimation(scaleUp);
+                    } else {
+                        Animation scaleDown = new ScaleAnimation(1.2f, 1f, 1.2f, 1f,
+                                Animation.RELATIVE_TO_SELF, 0.5f,
+                                Animation.RELATIVE_TO_SELF, 0.5f);
+                        scaleDown.setFillAfter(true);
+                        scaleDown.setDuration(500);
+                        view.startAnimation(scaleDown);
+                    }
+
+                }
+            });
         }
 
         @Override
@@ -180,27 +219,67 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
     }
 
     private void createTodoView(TodoViewHolder holder, TodoPresentationModel todoPresentationModel) {
-        switch(todoPresentationModel.getPriority()) {
-            case HIGH_PRIORITY:
-                holder.itemView.setBackgroundColor(Color.parseColor("#FFCDD2"));
-                break;
-            case MED_PRIORITY:
-                holder.itemView.setBackgroundColor(Color.parseColor("#FFF9C4"));
-                break;
-            case LOW_PRIORITY:
-                holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(android.R.color.white));
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid priority inserted.");
-        }
+
 
         if(todoPresentationModel.getIsChecked()) {
-            holder.todoDescriptionTextView.setTextColor(holder.itemView.getResources().getColor(android.R.color.darker_gray));
+            //holder.todoDescriptionTextView.setTextColor(holder.itemView.getResources().getColor(android.R.color.darker_gray));
             holder.todoDescriptionTextView.setPaintFlags(holder.todoDescriptionTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-            holder.itemView.setBackgroundColor(Color.parseColor("#F5F5F5"));
+            setBackgroundBasedPriority(holder, todoPresentationModel, true);
+
         } else {
             holder.todoDescriptionTextView.setPaintFlags(holder.todoDescriptionTextView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
-            holder.todoDescriptionTextView.setTextColor(holder.itemView.getResources().getColor(android.R.color.primary_text_light));
+            //holder.todoDescriptionTextView.setTextColor(holder.itemView.getResources().getColor(android.R.color.primary_text_light));
+            holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(android.R.color.white));
+            setBackgroundBasedPriority(holder, todoPresentationModel, false);
+        }
+    }
+
+    private void setBackgroundBasedPriority(TodoViewHolder holder, TodoPresentationModel todoPresentationModel, boolean isChecked) {
+
+
+        if (sharedPreferencesManager.read(Constants.SharedPrefs.PREF_THEME_KEY,
+                mContext.getResources().getBoolean(R.bool.pref_theme_def_value))) {
+            if (isChecked) {
+                holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.darkCheckedViewBackground));
+            } else {
+                switch(todoPresentationModel.getPriority()) {
+                    case HIGH_PRIORITY:
+                        holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.darkHighPriorityView));
+                        break;
+                    case MED_PRIORITY:
+                        holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.darkMediumPriorityView));
+                        break;
+                    case LOW_PRIORITY:
+                        holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.darkLowPriorityView));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid priority inserted.");
+                }
+            }
+
+
+        } else {
+            if (isChecked) {
+                holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.checkedViewBackground));
+
+                holder.todoDescriptionTextView.setTextColor(holder.itemView.getResources().getColor(R.color.darkCheckedTextColor));
+            } else {
+                switch(todoPresentationModel.getPriority()) {
+                    case HIGH_PRIORITY:
+                        holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.highPriorityView));
+                        break;
+                    case MED_PRIORITY:
+                        holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(R.color.mediumPriorityView));
+                        break;
+                    case LOW_PRIORITY:
+                        holder.itemView.setBackgroundColor(holder.itemView.getResources().getColor(android.R.color.white));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid priority inserted.");
+                }
+                holder.todoDescriptionTextView.setTextColor(holder.itemView.getResources().getColor(android.R.color.primary_text_light));
+            }
+
         }
     }
 

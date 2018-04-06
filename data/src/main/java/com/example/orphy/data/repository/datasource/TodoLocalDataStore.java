@@ -1,25 +1,16 @@
 package com.example.orphy.data.repository.datasource;
 
-import android.arch.persistence.db.SupportSQLiteOpenHelper;
-import android.arch.persistence.room.DatabaseConfiguration;
-import android.arch.persistence.room.InvalidationTracker;
 import android.content.Context;
 import android.util.Log;
 
 import com.example.orphy.data.AppDatabase;
 import com.example.orphy.data.TodoModel;
-import com.example.orphy.data.TodoModelDao;
-import com.example.orphy.domain.interactor.GetTodos;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
